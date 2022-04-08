@@ -1,0 +1,190 @@
+---
+title: 'dapR1: Coursework Report'
+subtitle: "Department of Psychology, The University of Edinburgh"
+author: "YOUR_EXAM_NUMBER"
+date: "Academic year 2021/22"
+output: html_document
+---
+
+# Data & Study Background
+
+An organisation was interested in whether taking part in a one-week cognitive behavioural therapy (CBT) based programme was associated with lower average anxiety levels for their staff.
+
+They recruited 60 members of staff from two role status positions - Management and Employee. In order to determine whether taking part in the CBT programme was associated with lower levels of anxiety, staff were allocated either to the CBT condition (30 minute session per day), or to a Control group (in which they continue their work as normal). Anxiety levels for staff in both conditions were measured at two different time points: pre- and post-intervention.
+
+Anxiety was measured by asking the participants to complete the same anxiety questionnaire (scores range from 0 to 25) before and after the week.  
+
+> **Research question:**
+>
+> Is taking part in a cognitive behavioural therapy (CBT) based programme associated with a greater reduction, on average, in anxiety scores in comparison to a Control group?
+
+
+# Instructions
+
+Using the data described above, answer the questions provided below in the space underneath each question. **Note: the interpretation and commenting answers should be limited to the maximum number of sentences outlined next to the question number.**  
+The code chunk below will read the data directly into your R session
+ 
+```{r}
+library(tidyverse)
+repdata <- read_csv("https://uoepsy.github.io/data/dapr1_2122_report_data.csv")
+```
+
+
+
+
+# Task A: Checking for group differences at baseline
+
+Prior to conducting our main analysis, we would like to assess our two groups (those who took part in the CBT programme and those who did not) for differences that may influence our results, such as whether they consist of different proportions of managers/employees, and whether they differ on their initial anxiety scores.  
+
+
+### Question A.1 (3 or fewer sentences)
+
+Create a table of descriptive statistics for the number of managers/employees in the CBT and Control groups. 
+
+Interpret the summary statistics in the context of the study, and provide a comment about what they reveal.
+
+Answer below:
+
+```{r}
+table1 <- repdata %>%
+  dplyr::select(-anx_t1, -anx_t2) %>%
+  dplyr::group_by(cbt) %>%
+  dplyr::mutate(is_manager = prof == "management") %>%
+  dplyr::mutate(is_employee = prof == "employee") %>%
+  dplyr::summarise(employee = sum(is_manager), manager = sum(is_employee), sum = n())
+print(table1)
+```
+
+...Replace this with your interpretation...
+
+### Question A.2 (5 or fewer sentences)
+
+Is employment level independent from being allocated to the CBT programme/Control Group? 
+
+Specify the null and alternative hypotheses, and perform the appropriate formal test. Report the results of the test in APA format, and interpret the outcome in the context of the study.
+
+Answer below:
+
+```{r}
+table(repdata$cbt, repdata$prof)
+chisq.test(repdata$cbt, repdata$prof, correct=FALSE)
+```
+
+...Replace this with your interpretation...
+
+### Question A.3 (5 or fewer sentences)
+
+Formal statistical tests rely on specific assumptions. Are these assumptions satisfied for the test conducted in Question A.2? Explain in the context of this study.
+
+Answer below:
+
+```{r}
+# ...Replace this with your code...
+```
+
+...Replace this with your interpretation...
+
+### Question A.4 (5 or fewer sentences)
+
+Do the two groups (CBT vs Control) differ in their initial anxiety scores at the onset of the study? 
+
+Specify the null and alternative hypotheses, and perform the appropriate formal test. Report the results of the test in APA format, and interpret the outcome in the context of the study.
+
+Answer below:
+
+```{r}
+# ...Replace this with your code...
+control <- repdata %>%
+  dplyr::filter(cbt == 'control')
+cbt <- repdata %>%
+  dplyr::filter(cbt == 'cbt')
+t.test(control$anx_t1, cbt$anx_t1, paired = FALSE, var.equal = TRUE)
+```
+
+...Replace this with your interpretation...
+
+### Question A.5 (5 or fewer sentences)
+
+Formal statistical tests rely on specific assumptions. Are these assumptions satisfied for the test conducted in Question A.4? Explain in the context of this study.
+
+Answer below:
+
+```{r}
+# ...Replace this with your code...
+```
+
+...Replace this with your interpretation...
+
+
+
+# Task B: Assessing if CBT is associated with greater anxiety reduction
+
+We will now address our primary research aim, as detailed earlier: is taking part in a cognitive behavioural therapy (CBT) based programme associated with a greater reduction, on average, in anxiety scores in comparison to a Control group?  
+
+
+### Question B.1 (3 or fewer sentences)
+
+Create a table of descriptive statistics for the changes in anxiety for those taking part in the CBT programme and those in the control group.   
+
+Interpret the summary statistics in the context of the study, and provide a comment about what they reveal.
+
+Answer below:
+
+```{r}
+# ...Replace this with your code...
+```
+
+...Replace this with your interpretation...
+
+### Question B.2 (3 or fewer sentences)
+
+Visualise the distribution of reduction in anxiety for CBT and Controls. 
+
+Comment on what the plot highlights.
+
+Answer below:
+
+```{r}
+# ...Replace this with your code...
+```
+
+...Replace this with your interpretation...
+
+### Question B.3 (5 or fewer sentences)
+
+Is taking part in the CBT programme associated with, on average, a greater reduction in anxiety scores in comparison to the control group?
+
+Specify the null and alternative hypotheses, and perform the appropriate formal test. Report the results of the test in APA format, and interpret the outcome in the context of the study.
+
+Answer below:
+
+```{r}
+# ...Replace this with your code...
+```
+
+...Replace this with your interpretation...
+
+### Question B.4 (5 or fewer sentences)
+
+Formal statistical tests rely on specific assumptions. Are these assumptions satisfied for the test conducted in Question B.3? Explain in the context of this study.
+
+Answer below:
+
+```{r}
+# ...Replace this with your code...
+```
+
+...Replace this with your interpretation...
+
+### Question B.5 (5 or fewer sentences)
+
+What do you conclude about the effect under scrutiny in this study? Is there a significant effect? Is the effect important? Explain why.
+
+Answer below:
+
+```{r}
+# ...Replace this with your code...
+```
+
+...Replace this with your interpretation...
+
