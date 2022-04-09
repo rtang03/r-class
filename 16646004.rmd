@@ -132,6 +132,10 @@ Answer below:
 
 ```{r}
 # ...Replace this with your code...
+repdata %>%
+  dplyr::select(-anx_t2) %>%
+  dplyr::group_by(cbt) %>%
+  dplyr::summarise(anx_t1_mean = round(mean(anx_t1), 2), Variance = round(var(anx_t1), 2), SD = round(sd(anx_t1), 2), count = n())
 ```
 
 ...Replace this with your interpretation...
@@ -160,6 +164,15 @@ Answer below:
 
 ```{r}
 # ...Replace this with your code...
+control <- repdata %>%
+  dplyr::mutate(diff = anx_t2 - anx_t1) %>%
+  dplyr::select(-anx_t1, -anx_t2) %>%
+  dplyr::filter(cbt == 'control')
+cbt <- repdata %>%
+  dplyr::mutate(diff = anx_t2 - anx_t1) %>%
+  dplyr::select(-anx_t1, -anx_t2) %>%
+  dplyr::filter(cbt == 'cbt')
+t.test(control$diff, cbt$diff, paired = FALSE, var.equal = TRUE, alternative = 'less')
 ```
 
 ...Replace this with your interpretation...
