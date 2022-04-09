@@ -46,13 +46,15 @@ Interpret the summary statistics in the context of the study, and provide a comm
 Answer below:
 
 ```{r}
-table1 <- repdata %>%
+dataf1 <- repdata %>%
   dplyr::select(-anx_t1, -anx_t2) %>%
   dplyr::group_by(cbt) %>%
   dplyr::mutate(is_manager = prof == "management") %>%
   dplyr::mutate(is_employee = prof == "employee") %>%
-  dplyr::summarise(employee = sum(is_manager), manager = sum(is_employee), sum = n())
-print(table1)
+  dplyr::summarise(manager = sum(is_manager), employee = sum(is_employee), manager_percentage = 100 * round(sum(is_manager) / n(), 4), employee_percentage = 100 * round(sum(is_employee) / n(), 4))
+dataf2 <- t(dataf1)
+colnames(dataf2) <- c('CBT', 'CONTROL')
+print(dataf2)
 ```
 
 ...Replace this with your interpretation...
@@ -131,11 +133,22 @@ Interpret the summary statistics in the context of the study, and provide a comm
 Answer below:
 
 ```{r}
-# ...Replace this with your code...
-repdata %>%
+t1_table <- repdata %>%
   dplyr::select(-anx_t2) %>%
   dplyr::group_by(cbt) %>%
   dplyr::summarise(anx_t1_mean = round(mean(anx_t1), 2), Variance = round(var(anx_t1), 2), SD = round(sd(anx_t1), 2), count = n())
+t2_table <- repdata %>%
+  dplyr::select(-anx_t1) %>%
+  dplyr::filter(anx_t2 != 'NA') %>%
+  dplyr::group_by(cbt) %>%
+  dplyr::summarise(anx_t2_mean = round(mean(anx_t2), 2), Variance = round(var(anx_t2), 2), SD = round(sd(anx_t2), 2), count = n())
+diff_table <- repdata %>%
+  dplyr::filter(anx_t2 != 'NA') %>%
+  dplyr::group_by(cbt) %>%
+  dplyr::summarise(diff_mean = round(mean(anx_t2 - anx_t1), 2), Variance = round(var(anx_t2 - anx_t1), 2), SD = round(sd(anx_t2 - anx_t1), 2), count = n())
+print(t1_table)
+print(t2_table)
+print(diff_table)
 ```
 
 ...Replace this with your interpretation...
@@ -149,7 +162,8 @@ Comment on what the plot highlights.
 Answer below:
 
 ```{r}
-# ...Replace this with your code...
+repdata %>%
+  ggplot(., aes(x= cbt, y=anx_t2 - anx_t1)) + geom_boxplot()
 ```
 
 ...Replace this with your interpretation...
@@ -172,7 +186,7 @@ cbt <- repdata %>%
   dplyr::mutate(diff = anx_t2 - anx_t1) %>%
   dplyr::select(-anx_t1, -anx_t2) %>%
   dplyr::filter(cbt == 'cbt')
-t.test(control$diff, cbt$diff, paired = FALSE, var.equal = TRUE, alternative = 'less')
+t.test(control$diff, cbt$diff, paired = FALSE, var.equal = TRUE, alternative = 'greater')
 ```
 
 ...Replace this with your interpretation...
